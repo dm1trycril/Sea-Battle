@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <strong>Auth Page</strong>
-  </div>
+  <auth-form></auth-form>
 </template>
 
 <script>
-export default {
 
+import AuthForm from "@/components/AuthForm";
+
+export default {
+  components: {
+    AuthForm
+  }
 }
 </script>
-
 <style>
-
 </style>
