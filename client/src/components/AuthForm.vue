@@ -5,7 +5,7 @@
       <form action="" method="post" class="login-form">
         <input type="text" name="email" placeholder="email">
         <input type="password" name="password" placeholder="password">
-        <button>Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
   </div>
