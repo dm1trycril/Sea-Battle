@@ -19,7 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/api/ping', function (Request $request) {
+Route::get('/ping', function (Request $request) {
     // Log::info("ping pong");
-    return 'pong';
+    return response()->json('pong');
 });
