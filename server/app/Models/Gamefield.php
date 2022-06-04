@@ -4,15 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
-class User extends Model
+class Gamefield extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = "gamefields";
 
     protected $fillable = [
-        'login',
-        'password'
+        'gamefield'
+    ];
+
+    protected $casts = [
+        'gamefield' => 'array'
     ];
 }

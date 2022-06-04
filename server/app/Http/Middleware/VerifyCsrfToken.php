@@ -13,6 +13,15 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
-        'api/ping'
     ];
+
+    protected function inExceptArray($request)
+    {
+        $do_check = false;
+        if( $do_check )
+        {
+            return parent::inExceptArray($request);
+        }
+        return true;
+    }
 }

@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Gamestatus extends Model
 {
     use HasFactory;
 
-    protected $table = 'users';
+    protected $table = 'gamestatuses';
 
-    protected $fillable = [
-        'login',
-        'password'
-    ];
+    protected $fillable = ['status_name'];
 }
