@@ -1,4 +1,5 @@
 # Sea-Battle
+The turn field store the user ID
 
 Gamefield values:
 

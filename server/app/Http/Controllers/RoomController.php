@@ -16,6 +16,11 @@ class RoomController extends Controller
         $this->roomRepo = $roomRepo;
     }
 
+    // public function WhoseTurn(Request $request)
+    // {
+    //     return response()->json($this->roomRepo->WhoseTurn((int)$request->get('room_id')));
+    // }
+
     public function MakeShot(Request $request)
     {
         $room_id = (int)$request->get('room_id');

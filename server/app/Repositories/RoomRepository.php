@@ -11,6 +11,11 @@ use App\Models\Gamefield;
 
 class RoomRepository implements RoomRepositoryInterface
 {
+    public function WhoseTurn($room_id)
+    {
+        return Room::where('id', $room_id)->first()->turn;
+    }
+
     public function SwitchTurn($room_id)
     {
         $room = Room::where('id', $room_id)->first();
