@@ -1,17 +1,13 @@
 <template>
   <div>
       <strong>Main Page</strong>
-      <bttn-ui @click="Ping">Ping</bttn-ui>
+      <bttn-ui @click="$router.push('/room')">PLAY</bttn-ui>
   </div>
 </template>
 
 <script>
 export default {
-  methods: {
-    Ping() {
-      fetch('/api/ping')
-    }
-  }
+  
 }
 </script>
 
