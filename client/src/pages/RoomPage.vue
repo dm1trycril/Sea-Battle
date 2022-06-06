@@ -11,9 +11,13 @@
       </div>
     </div>
     <div class="field-wrapper">
-      <field-ui>
+      <field-ui
+        :gamefield="getGamefield"
+      >
       </field-ui>
-      <field-ui>
+      <field-ui
+        :gamefield="getGamefield"
+      >
       </field-ui>
     </div>
     <div class="turn-wrapper">
@@ -24,8 +28,31 @@
 </template>
 
 <script>
-export default {
 
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+
+export default {
+  methods: {
+    ...mapMutations({
+      setGamefield: 'room/setGamefield'
+    }),
+    ...mapActions({
+      loadUserGamefield: 'room/loadUserGamefield'
+    })
+  },
+
+  async mounted() {
+    await this.loadUserGamefield();
+  },
+
+  computed: {
+    ...mapState({
+      gamefield: state => state.room.gamefield,
+    }),
+    ...mapGetters({
+      getGamefield: 'room/getGamefield',
+    })
+  }
 }
 </script>
 

@@ -1,10 +1,16 @@
 <template>
-  <div class="cell"></div>
+  <div class="cell"> {{ cell }} </div>
 </template>
 
 <script>
 export default {
-    name: 'cell-ui'
+    name: 'cell-ui',
+    props: {
+      cell: {
+        type: Number,
+        required: true
+    }
+  }
 }
 </script>
 

@@ -3,5 +3,5 @@ export default class FieldsApi {
         this.client = client;
     }
 
-    getUserGamefield = async (room_id, user_id) => await this.client.get(`/api/getgamefield?room_id=${room_id}&user_id=${user_id}`)
+    getUserGamefield = async (room_id, user_id) => await this.client.get(`/getgamefield?room_id=${room_id}&user_id=${user_id}`)
 }

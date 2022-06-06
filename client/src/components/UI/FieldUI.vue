@@ -6,8 +6,9 @@
         >
         </row-ui> -->
         <cell-ui
-          v-for="n in counter"
-          :key="n"
+          v-for="cell in gamefield"
+          :cell="cell"
+          :key="cell"
         >
         </cell-ui>
   </div>
@@ -19,6 +20,12 @@ export default {
     data() {
       return {
         counter: 100
+      }
+    },
+    props: {
+      gamefield: {
+        type: Array,
+        required: true
       }
     }
 }

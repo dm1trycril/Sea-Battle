@@ -1,4 +1,4 @@
-
+import Api from "@/api";
 
 export const roomModule = {
     state: () => ({
@@ -15,12 +15,20 @@ export const roomModule = {
             return state.gamefield;
         }
     },
-    mutation: {
-        setGameield(state, gamefield) {
+    mutations: {
+        setGamefield(state, gamefield) {
             state.gamefield = gamefield;
         }
     },
     actions: {
-        
-    }
+        async loadUserGamefield({commit}) {
+            try {
+                const fieldData = await Api.fields.getUserGamefield(1, 1);
+                commit('setGamefield', fieldData.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    },
+    namespaced: true
 }
