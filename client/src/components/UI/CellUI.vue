@@ -10,9 +10,7 @@ export default {
 
 <style>
 .cell {
-    width: 10%;
     aspect-ratio: 1/1;
-
     border: 1px solid black;
     background-color: aqua;
 }

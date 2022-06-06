@@ -16,11 +16,6 @@ class RoomController extends Controller
         $this->roomRepo = $roomRepo;
     }
 
-    // public function WhoseTurn(Request $request)
-    // {
-    //     return response()->json($this->roomRepo->WhoseTurn((int)$request->get('room_id')));
-    // }
-
     public function MakeShot(Request $request)
     {
         $room_id = (int)$request->get('room_id');
@@ -29,5 +24,13 @@ class RoomController extends Controller
         $y = (int)$request->get('y');
 
         return response()->json($this->roomRepo->MakeShot($room_id, $user_id, $x, $y));
+    }
+    
+    public function GetGamefield(Request $request)
+    {
+        $room_id = (int)$request->get('room_id');
+        $user_id = (int)$request->get('user_id');
+
+        return response()->json($this->roomRepo->GetGamefield($room_id, $user_id));
     }
 }

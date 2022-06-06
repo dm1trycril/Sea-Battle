@@ -23,4 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/makeshot', [RoomController::class, 'MakeShot']);
 
-// Route::get('/whoseturn', [RoomController::class, 'WhoseTurn']);
+Route::get('/getgamefield', [RoomController::class, 'GetGamefield']);

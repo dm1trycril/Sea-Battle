@@ -39,7 +39,7 @@ class RoomRepository implements RoomRepositoryInterface
         return $room->turn == $user_id;
     }
 
-    public function GetOpponentFieldId($room_id, $user_id)
+    public function GetFieldId($room_id, $user_id)
     {
         $room = Room::where('id', $room_id)->first();
 
@@ -50,6 +50,21 @@ class RoomRepository implements RoomRepositoryInterface
         if ($room->second_user_id == $user_id)
         {
             return $room->second_user_gamefield_id;
+        }
+        throw new Exception('Error: user not belongs to this room');
+    }
+
+    public function GetOpponentFieldId($room_id, $user_id)
+    {
+        $room = Room::where('id', $room_id)->first();
+
+        if ($room->first_user_id == $user_id)
+        {
+            return $room->second_user_gamefield_id;
+        }
+        if ($room->second_user_id == $user_id)
+        {
+            return $room->first_user_gamefield_id;
         }
         throw new Exception('Error: user not belongs to this room');
     }
@@ -95,5 +110,11 @@ class RoomRepository implements RoomRepositoryInterface
         }
         
         return  ['status' => 'error', 'error' => 'bad_parameters'];
+    }
+
+    public function GetGamefield($room_id, $user_id) {
+        $gamefield_id = $this->GetFieldId($room_id, $user_id);
+        $gamefield = Gamefield::where('id', $gamefield_id)->first()->gamefield;
+        return $gamefield;
     }
 }
