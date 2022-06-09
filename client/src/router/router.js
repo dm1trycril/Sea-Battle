@@ -1,5 +1,5 @@
 import MainPage from '@/pages/MainPage';
-import AuthPage from '@/pages/AuthPage';
+import LoginPage from '@/pages/LoginPage';
 import RoomPage from '@/pages/RoomPage';
 import RegistrationPage from '@/pages/RegistrationPage';
 
@@ -11,8 +11,8 @@ const routes = [
         component: MainPage
     },
     {
-        path: '/auth',
-        component: AuthPage
+        path: '/login',
+        component: LoginPage
     },
     {
         path: '/room',

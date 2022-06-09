@@ -1,27 +1,35 @@
 <template>
     <div class="auth-page">
     <div class="form">
-      <h3 class="form-header">LOGIN</h3>
+      <h3 class="form-header">{{ header_title }}</h3>
         <div class="login-form">
           <input type="text" name="login" placeholder="login" :value="login" @input="setLogin">
           <input type="password" name="password" placeholder="password" :value="password" @input="setPassword">
-        <button @click="sendRegisterData">SIGN IN</button>
+        <button @click="$emit('submit', login, password)">{{ submit_button_title }}</button>
         </div>
     </div>
   </div>
 </template>
 
 <script>
-import Api from '@/api'
-import router from '@/router/router';
 
 export default {
     name: 'auth-form',
-        data() {
+    data() {
       return {
         login: "",
         password: ""
       }
+    },
+    props: {
+      header_title: {
+        type: String,
+        required: true
+      },
+      submit_button_title: {
+        type: String,
+        required: true
+      } 
     },
     methods: {
       setLogin(event) {
@@ -30,14 +38,6 @@ export default {
       setPassword(event) {
         this.password = event.target.value;
       },
-      async sendRegisterData() {
-        const response = await Api.auth.loginUser(this.login, this.password);
-        if(response.data.status === 'ok')
-        {
-          localStorage.setItem('login', response.data.login);
-          router.push('/');
-        }
-      }
     }
 }
 </script>

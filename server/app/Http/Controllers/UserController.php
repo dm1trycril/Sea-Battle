@@ -31,7 +31,8 @@ class UserController extends Controller
         return response()->json([
             'status' => 'ok',
             'message' => 'created',
-        ])->setStatusCode(204);
+            'login' => $user->login
+        ]);
     }
 
     public function Login(Request $request)
@@ -59,8 +60,6 @@ class UserController extends Controller
         return response()->json([
             'status' => 'error',
             'error' => 'incorrect password',
-            'db_password' => $user->password,
-            'has_password' => Hash::make($request->get('password'))
         ])->setStatusCode(400);
     }
 }

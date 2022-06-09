@@ -1,9 +1,10 @@
 <template>
-  <auth-form header_title="REGISTRATION" submit_button_title="SIGN UP" @submit="sendRegisterData">
+  <auth-form header_title="LOGIN" submit_button_title="SIGN IN" @submit="sendLoginData">
   </auth-form>
 </template>
 
 <script>
+
 import AuthForm from "@/components/AuthForm";
 
 import Api from '@/api'
@@ -14,11 +15,18 @@ export default {
     AuthForm
   },
   methods: {
-    async sendRegisterData(login, password) {
-      const response = await Api.auth.registerUser(login, password);
+    async sendLoginData(login, password) {
+      const response = await Api.auth.loginUser(login, password);
+      console.log(response)
       if (response.data.status === 'ok') {
         localStorage.setItem('login', response.data.login);
         router.push('/');
+      }
+      else {
+        this.$notify({
+          title: 'Cannot login',
+          text: response.data.error
+        });
       }
     }
   }
