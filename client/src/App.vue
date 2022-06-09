@@ -3,7 +3,7 @@
     <div class="app">
         <router-view></router-view>
     </div>
-    <notifications/>
+    <notifications position="bottom right"/>
 </template>
 
 <script>

@@ -20,6 +20,13 @@ export default {
         localStorage.setItem('login', response.data.login);
         router.push('/');
       }
+      else {
+        this.$notify({
+          title: 'Error during registration',
+          text: response.data.error,
+          type: "error"
+        });
+      }
     }
   }
 }

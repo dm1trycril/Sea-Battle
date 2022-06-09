@@ -25,7 +25,8 @@ export default {
       else {
         this.$notify({
           title: 'Cannot login',
-          text: response.data.error
+          text: response.data.error,
+          type: "error"
         });
       }
     }

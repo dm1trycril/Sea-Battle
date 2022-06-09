@@ -18,7 +18,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'error',
                 'error' => 'login exists'
-            ])->setStatusCode(404);
+            ])->setStatusCode(400);
         }
 
         $user = new User();
