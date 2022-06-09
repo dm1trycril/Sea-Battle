@@ -117,4 +117,21 @@ class RoomRepository implements RoomRepositoryInterface
         $gamefield = Gamefield::where('id', $gamefield_id)->first()->gamefield;
         return $gamefield;
     }
+
+    public function CreateEmptyGamefield() {
+        $gamefield = new Gamefield();
+        $gamefield->gamefield = array_fill(0, 100, 0);
+        $gamefield->save();
+        return $gamefield->id;
+    }
+
+    public function CreateRoom($user_id) {
+        $room = new Room();
+        $room->first_user_id = $user_id;
+        $room->first_user_gamefield_id = $this->CreateEmptyGamefield();
+        $room->turn = $user_id;
+        $room->status_name = 1; //code 1 means "awaiting"
+        $room->save();
+        return $room->id;
+    }
 }

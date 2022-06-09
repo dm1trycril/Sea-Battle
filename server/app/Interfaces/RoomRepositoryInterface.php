@@ -15,4 +15,7 @@ interface RoomRepositoryInterface
     public function MakeShot($room_id, $user_id, $x, $y);
 
     public function GetGamefield($room_id, $user_id);
+
+    public function CreateEmptyGamefield();
+    public function CreateRoom($user_id);
 }

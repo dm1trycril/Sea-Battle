@@ -33,4 +33,11 @@ class RoomController extends Controller
 
         return response()->json($this->roomRepo->GetGamefield($room_id, $user_id));
     }
+
+    public function CreateRoom(Request $request)
+    {
+        $user_id = (int)$request->get('user_id');
+        $room_id = $this->roomRepo->CreateRoom($user_id);
+        return response()->json($room_id);
+    }
 }

@@ -42,7 +42,7 @@ export default {
   },
 
   async mounted() {
-    await this.loadUserGamefield();
+    // await this.loadUserGamefield();
   },
 
   computed: {
