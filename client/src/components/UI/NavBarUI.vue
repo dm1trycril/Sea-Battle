@@ -3,7 +3,8 @@
       <div>SEABATTLE</div>
       <div class="navbar-bttns">
           <bttn-ui @click="$router.push('/')">Main</bttn-ui>
-          <bttn-ui @click="$router.push('/auth')">LOGIN</bttn-ui>
+          <bttn-ui @click="$router.push('/auth')">SIGN IN</bttn-ui>
+          <bttn-ui @click="$router.push('/register')">SIGN UP</bttn-ui>
       </div>
   </div>
 </template>

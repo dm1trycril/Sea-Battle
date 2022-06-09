@@ -2,18 +2,43 @@
     <div class="auth-page">
     <div class="form">
       <h3 class="form-header">LOGIN</h3>
-      <form action="" method="post" class="login-form">
-        <input type="text" name="email" placeholder="email">
-        <input type="password" name="password" placeholder="password">
-        <button type="submit">Submit</button>
-      </form>
+        <div class="login-form">
+          <input type="text" name="login" placeholder="login" :value="login" @input="setLogin">
+          <input type="password" name="password" placeholder="password" :value="password" @input="setPassword">
+        <button @click="sendRegisterData">SIGN IN</button>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
+import Api from '@/api'
+import router from '@/router/router';
+
 export default {
-    name: 'auth-form'
+    name: 'auth-form',
+        data() {
+      return {
+        login: "",
+        password: ""
+      }
+    },
+    methods: {
+      setLogin(event) {
+        this.login = event.target.value;
+      },
+      setPassword(event) {
+        this.password = event.target.value;
+      },
+      async sendRegisterData() {
+        const response = await Api.auth.loginUser(this.login, this.password);
+        if(response.data.status === 'ok')
+        {
+          localStorage.setItem('login', response.data.login);
+          router.push('/');
+        }
+      }
+    }
 }
 </script>
 

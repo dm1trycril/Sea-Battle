@@ -1,10 +1,5 @@
 <template>
   <div class="field">
-        <!-- <row-ui
-            v-for="n in counter"
-            :key="n"
-        >
-        </row-ui> -->
         <cell-ui
           v-for="cell in gamefield"
           :cell="cell"
@@ -17,11 +12,6 @@
 <script>
 export default {
     name: 'field-ui',
-    data() {
-      return {
-        counter: 100
-      }
-    },
     props: {
       gamefield: {
         type: Array,

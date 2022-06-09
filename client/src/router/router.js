@@ -1,6 +1,7 @@
 import MainPage from '@/pages/MainPage';
 import AuthPage from '@/pages/AuthPage';
 import RoomPage from '@/pages/RoomPage';
+import RegistrationPage from '@/pages/RegistrationPage';
 
 import { createRouter, createWebHistory } from "vue-router";
 
@@ -16,6 +17,10 @@ const routes = [
     {
         path: '/room',
         component: RoomPage
+    },
+    {
+        path: '/register',
+        component: RegistrationPage
     }
 ];
 

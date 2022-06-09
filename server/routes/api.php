@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\RoomController;
-use App\Models\Room;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/makeshot', [RoomController::class, 'MakeShot']);
 
 Route::get('/getgamefield', [RoomController::class, 'GetGamefield']);
+
+Route::post('/register', [UserController::class, 'Register']);
+
+Route::post('/login', [UserController::class, 'Login']);
