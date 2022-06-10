@@ -11,13 +11,9 @@
       </div>
     </div>
     <div class="field-wrapper">
-      <field-ui
-        :gamefield="getGamefield"
-      >
+      <field-ui :gamefield="getGamefield" @changeCellState="shipsPlacement">
       </field-ui>
-      <field-ui
-        :gamefield="getGamefield"
-      >
+      <field-ui :gamefield="getGamefield">
       </field-ui>
     </div>
     <div class="turn-wrapper">
@@ -34,11 +30,15 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   methods: {
     ...mapMutations({
-      setGamefield: 'room/setGamefield'
+      setGamefield: 'room/setGamefield',
+      setOwnCell: 'room/setOwnCell',
     }),
     ...mapActions({
       loadUserGamefield: 'room/loadUserGamefield'
-    })
+    }),
+    shipsPlacement(new_state, index) {
+      this.setOwnCell({new_state, index});
+    }
   },
 
   async mounted() {
@@ -58,20 +58,23 @@ export default {
 
 <style>
 .room {
-    width: 100%;
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
+
 .info-wrapper {
   margin-top: 25px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
+
 .login {
   font-size: 2em;
 }
+
 .field-wrapper {
   margin-top: 25px;
   max-width: 100%;
@@ -79,6 +82,7 @@ export default {
   grid-template-columns: 1fr 1fr;
   gap: 50px;
 }
+
 .turn-wrapper {
   margin-top: 25px;
   width: 100%;
@@ -88,12 +92,14 @@ export default {
   grid-template-columns: 1fr 1fr;
   gap: 50px;
 }
+
 .turn-indicator {
   border: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 @media (max-width: 1024px) {
   .field-wrapper {
     grid-template-columns: 1fr;

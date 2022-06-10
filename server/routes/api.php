@@ -28,3 +28,5 @@ Route::get('/getgamefield', [RoomController::class, 'GetGamefield']);
 Route::post('/register', [UserController::class, 'Register']);
 
 Route::post('/login', [UserController::class, 'Login']);
+
+Route::post('/createroom', [RoomController::class, 'CreateRoom']);

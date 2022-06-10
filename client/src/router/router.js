@@ -15,7 +15,7 @@ const routes = [
         component: LoginPage
     },
     {
-        path: '/room:id',
+        path: '/room/:id',
         component: RoomPage
     },
     {

@@ -1,9 +1,11 @@
 <template>
   <div class="field">
         <cell-ui
-          v-for="cell in gamefield"
+          v-for="(cell, index) in gamefield"
           :cell="cell"
-          :key="cell"
+          :index="index"
+          :key="index"
+          @changeCellState="changeCellState"
         >
         </cell-ui>
   </div>
@@ -16,6 +18,11 @@ export default {
       gamefield: {
         type: Array,
         required: true
+      }
+    },
+    methods: {
+      changeCellState(new_state, index) {
+        this.$emit("changeCellState", new_state, index);
       }
     }
 }

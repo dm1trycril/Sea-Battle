@@ -6,7 +6,8 @@
 
 <script>
 export default {
-  name: 'bttn-ui'
+  name: 'bttn-ui',
+  
 }
 </script>
 

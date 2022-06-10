@@ -17,5 +17,6 @@ interface RoomRepositoryInterface
     public function GetGamefield($room_id, $user_id);
 
     public function CreateEmptyGamefield();
-    public function CreateRoom($user_id);
+
+    public function CreateRoom($login);
 }

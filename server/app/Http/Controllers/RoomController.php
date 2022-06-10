@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Http\Response;
 
 use App\Interfaces\RoomRepositoryInterface;
+use App\Models\Room;
 
 class RoomController extends Controller
 {
@@ -25,19 +26,13 @@ class RoomController extends Controller
 
         return response()->json($this->roomRepo->MakeShot($room_id, $user_id, $x, $y));
     }
-    
-    public function GetGamefield(Request $request)
-    {
-        $room_id = (int)$request->get('room_id');
-        $user_id = (int)$request->get('user_id');
-
-        return response()->json($this->roomRepo->GetGamefield($room_id, $user_id));
-    }
 
     public function CreateRoom(Request $request)
     {
-        $user_id = (int)$request->get('user_id');
-        $room_id = $this->roomRepo->CreateRoom($user_id);
-        return response()->json($room_id);
+        $login = $request->get('login');
+        $room_id = $this->roomRepo->CreateRoom($login);
+        return response()->json([
+            "room_id" => $room_id
+        ]);
     }
 }

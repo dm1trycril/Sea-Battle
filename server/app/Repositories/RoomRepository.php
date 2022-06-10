@@ -8,6 +8,7 @@ use App\Interfaces\RoomRepositoryInterface;
 use App\Models\Room;
 
 use App\Models\Gamefield;
+use App\Models\User;
 
 class RoomRepository implements RoomRepositoryInterface
 {
@@ -125,11 +126,18 @@ class RoomRepository implements RoomRepositoryInterface
         return $gamefield->id;
     }
 
-    public function CreateRoom($user_id) {
+    public function GetUserId($login) // Need to rename
+    {
+        $user = User::where('login', $login)->first();
+        return $user->id;
+    }
+
+    public function CreateRoom($login)
+    {
         $room = new Room();
-        $room->first_user_id = $user_id;
+        $room->first_user_id = $this->GetUserId($login);
         $room->first_user_gamefield_id = $this->CreateEmptyGamefield();
-        $room->turn = $user_id;
+        $room->turn = $room->first_user_id;
         $room->status_name = 1; //code 1 means "awaiting"
         $room->save();
         return $room->id;
