@@ -28,5 +28,6 @@ interface RoomRepositoryInterface
 
     public function SwitchReadyFlag($room_id);
     public function UserReady($room_id, $login, $gamefield);
+    public function UserJoin($room_id, $login);
 
 }

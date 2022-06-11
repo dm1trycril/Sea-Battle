@@ -22,7 +22,8 @@
       <div class="turn-indicator">OPPONENT</div>
     </div>
     <div class="bttn-play-wrapper" v-show="isPreparing">
-      <bttn-ui @click="handleUserReady" :isDisabled="playButtonDisabled">PLAY</bttn-ui>
+      <bttn-ui @click="handleUserReady" v-if="!playButtonDisabled">READY</bttn-ui>
+      <bttn-ui @click="handleUserJoin" v-if="!canPlay">JOIN</bttn-ui>
     </div>
   </div>
 </template>
@@ -31,11 +32,13 @@
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Api from "@/api";
+import router from '@/router/router';
 
 export default {
   data() {
     return {
-      playButtonDisabled: false
+      playButtonDisabled: false,
+      canPlay: false
     }
   },
   methods: {
@@ -46,7 +49,7 @@ export default {
       hitOpponentCell: 'room/hitOpponentCell'
     }),
     ...mapActions({
-
+      isLogged: 'room/isLogged'
     }),
     shipsPlacement(new_state, index) {
       this.setOwnCell({ new_state, index });
@@ -54,6 +57,7 @@ export default {
     shipsHitting(new_state, index) {
       this.hitOpponentCell({ new_state, index })
     },
+
     async handleUserReady() {
       const response = await Api.rooms.userReady(this.$route.params.id, this.getLogin, this.getGamefield);
       const message = response.data.message;
@@ -64,15 +68,39 @@ export default {
         });
       }
       else if (message === "start_game") {
+        this.playButtonDisabled = true;
         this.$notify({
           title: 'Starting game'
+        });
+      }
+    },
+
+    async handleUserJoin() {
+      const response = await Api.rooms.userJoin(this.$route.params.id, this.getLogin);
+      const message = response.data.message;
+      if (message === "user_joined") {
+        localStorage.setItem("joined", true);
+        this.canPlay = true;
+        this.$notify({
+          title: 'Joined'
         });
       }
     }
   },
 
   async mounted() {
-    this.loadLogin();
+    if (!await this.isLogged()) {
+      this.$notify({
+        title: 'You should be logged in',
+        type: 'warning'
+      });
+      router.push(`/login?next=${router.currentRoute.value.path}`);
+      return;
+    }
+    console.log(localStorage.getItem("joined"));
+    if (localStorage.getItem("joined")) {
+      this.canPlay = true;
+    }
   },
 
   computed: {

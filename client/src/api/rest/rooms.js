@@ -6,4 +6,6 @@ export default class RoomsApi {
     createRoom = async (login) => await this.client.post('/room/create', {login})
 
     userReady = async (room_id, login, gamefield) => await this.client.post('/room/ready', {room_id, login, gamefield})
+
+    userJoin = async (room_id, login) => await this.client.post('/room/join', {room_id, login})
 }

@@ -18,7 +18,13 @@ export default {
       const response = await Api.auth.registerUser(login, password);
       if (response.data.status === 'ok') {
         localStorage.setItem('login', response.data.login);
-        router.push('/');
+        let next = router.currentRoute.value.query['next'];
+        if (next) {
+          router.push(next);
+        }
+        else {
+          router.push('/');
+        }
       }
       else {
         this.$notify({

@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('rooms', function (Blueprint $table) {
-            $table->boolean('one_player_ready')->default(false);
+            $table->boolean('one_user_ready')->default(false);
         });
     }
 

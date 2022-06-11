@@ -28,3 +28,4 @@ Route::post('/login', [UserController::class, 'Login']);
 
 Route::post('/room/create', [RoomController::class, 'CreateRoom']);
 Route::post('/room/ready', [RoomController::class, 'UserReady']);
+Route::post('/room/join', [RoomController::class, 'UserJoin']);

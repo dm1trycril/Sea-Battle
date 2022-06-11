@@ -145,9 +145,9 @@ class RoomRepository implements RoomRepositoryInterface
     public function SwitchReadyFlag($room_id)
     {
         $room = Room::where('id', $room_id)->first();
-        $room->one_player_ready = !$room->one_player_ready;
+        $room->one_user_ready = !$room->one_user_ready;
         $room->save();
-        return $room->one_player_ready;
+        return $room->one_user_ready;
     }
 
     public function SetGamefield($gamfield_id, $gamefield)
@@ -171,5 +171,10 @@ class RoomRepository implements RoomRepositoryInterface
         }
 
         return $ready_flag;
+    }
+
+    public function UserJoin($room_id, $login,)
+    {
+        Room::where('id', $room_id)->update(['second_user_id' => $this->GetUserId($login), 'second_user_gamefield_id' => $this->CreateEmptyGamefield()]);
     }
 }

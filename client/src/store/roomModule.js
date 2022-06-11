@@ -79,5 +79,15 @@ export const roomModule = {
             state.opponent_gamefield = new_gamefield;
         }
     },
+    actions: {
+        isLogged({commit}) {
+            let login = localStorage.getItem('login');
+            if (login === null) {
+                return false;
+            }
+            commit('loadLogin');
+            return true;
+        }
+    },
     namespaced: true
 }

@@ -17,10 +17,15 @@ export default {
   methods: {
     async sendLoginData(login, password) {
       const response = await Api.auth.loginUser(login, password);
-      console.log(response)
       if (response.data.status === 'ok') {
         localStorage.setItem('login', response.data.login);
-        router.push('/');
+        let next = router.currentRoute.value.query['next'];
+        if (next) {
+          router.push(next);
+        }
+        else {
+          router.push('/');
+        }
       }
       else {
         this.$notify({

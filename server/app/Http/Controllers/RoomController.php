@@ -51,4 +51,16 @@ class RoomController extends Controller
             ]);
         }
     }
+
+    public function UserJoin(Request $request)
+    {
+        ['room_id' => $room_id, 'login' => $login] = $request->all();
+
+        $this->roomRepo->UserJoin($room_id, $login);
+
+        return response()->json([
+            "status" => "ok",
+            "message" => "user_joined"
+        ]);
+    }
 }
