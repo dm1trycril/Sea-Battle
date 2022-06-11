@@ -70,24 +70,23 @@ class RoomRepository implements RoomRepositoryInterface
         throw new Exception('Error: user not belongs to this room');
     }
 
-    public function GetCell($gamefield_id, $x, $y) {
+    public function GetCell($gamefield_id, $x) {
         $gamefield = Gamefield::where('id', $gamefield_id)->first()->gamefield;
-
-        return $gamefield[$x+$y*10];
+        return $gamefield[$x];
     }
 
-    public function SetCell($gamefield_id, $x, $y, $cell_status)
+    public function SetCell($gamefield_id, $x, $cell_status)
     {
         $gamefield = Gamefield::where('id', $gamefield_id)->first();
 
         $gamefield_value = $gamefield->gamefield;
-        $gamefield_value[$x+$y*10] = $cell_status;
+        $gamefield_value[$x] = $cell_status;
         $gamefield->gamefield = $gamefield_value;
 
         $gamefield->save();
     }
 
-    public function MakeShot($room_id, $user_id, $x, $y) {
+    public function MakeShot($room_id, $user_id, $x) {
         if (!$this->CanMakeMove($room_id, $user_id))
         {
             return  ['status' => 'error', 'error' => 'cannot_move'];
@@ -95,17 +94,17 @@ class RoomRepository implements RoomRepositoryInterface
 
         $gamefield_id = $this->GetOpponentFieldId($room_id, $user_id);
 
-        $cell_status = $this->GetCell($gamefield_id, $x, $y);
+        $cell_status = $this->GetCell($gamefield_id, $x);
 
         if ($cell_status == 0)
         {
-            $this->SetCell($gamefield_id, $x, $y, 2);
+            $this->SetCell($gamefield_id, $x, 2);
             $this->SwitchTurn($room_id);
             return ['status' => 'ok'];
         }
         else if ($cell_status == 1)
         {
-            $this->SetCell($gamefield_id, $x, $y, 2);
+            $this->SetCell($gamefield_id, $x, 2);
             $this->SwitchTurn($room_id);
             return ['status' => 'ok'];
         }
@@ -132,7 +131,7 @@ class RoomRepository implements RoomRepositoryInterface
         return $user->id;
     }
 
-    public function CreateRoom($login)
+    public function CreateRoom($login) 
     {
         $room = new Room();
         $room->first_user_id = $this->GetUserId($login);
@@ -141,5 +140,36 @@ class RoomRepository implements RoomRepositoryInterface
         $room->status_name = 1; //code 1 means "awaiting"
         $room->save();
         return $room->id;
+    }
+
+    public function SwitchReadyFlag($room_id)
+    {
+        $room = Room::where('id', $room_id)->first();
+        $room->one_player_ready = !$room->one_player_ready;
+        $room->save();
+        return $room->one_player_ready;
+    }
+
+    public function SetGamefield($gamfield_id, $gamefield)
+    {
+        $gamefield = Gamefield::where('id', $gamfield_id)->first();
+        $gamefield->gamefield = $gamefield;
+        $gamefield->save();
+    }
+
+    public function UserReady($room_id, $login, $gamefield)
+    {
+        $gamefield_id = $this->GetFieldId($room_id, $this->GetUserId($login));
+
+        $this->SetGamefield($gamefield_id, $gamefield);
+
+        $ready_flag = $this->SwitchReadyFlag($room_id);
+
+        if(!$ready_flag)
+        {
+            Room::where('id', $room_id)->update(['status_name' => 3]);  // code 3 means "game"
+        }
+
+        return $ready_flag;
     }
 }

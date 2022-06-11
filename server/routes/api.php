@@ -17,16 +17,14 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::get('/makeshot', [RoomController::class, 'MakeShot']);
 
-Route::get('/getgamefield', [RoomController::class, 'GetGamefield']);
-
 Route::post('/register', [UserController::class, 'Register']);
-
 Route::post('/login', [UserController::class, 'Login']);
 
-Route::post('/createroom', [RoomController::class, 'CreateRoom']);
+Route::post('/room/create', [RoomController::class, 'CreateRoom']);
+Route::post('/room/ready', [RoomController::class, 'UserReady']);

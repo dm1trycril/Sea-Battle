@@ -1,18 +1,24 @@
 <template>
-  <button class="bttn">
+  <button :disabled="isDisabled">
       <slot></slot>
   </button>
 </template>
 
 <script>
+
 export default {
   name: 'bttn-ui',
-  
+  props: {
+    isDisabled: {
+      type: Boolean,
+      default: false
+    }
+  }
 }
 </script>
 
 <style scoped>
-.bttn {
+button {
     align-self: flex-end;
     padding: 10px 15px;
     background: white;
@@ -22,4 +28,7 @@ export default {
     margin: 0px 5px;
 }
 
+button:disabled {
+  opacity: 0.5;
+}
 </style>

@@ -9,3 +9,11 @@ Gamefield values:
 - 3 - hit
 
 Gamefiled cells numeration starts from zero (0)
+
+Gamestatuses:
+
+1 - awaiting
+2 - preparing
+3 - game
+4 - pause
+5 - ending

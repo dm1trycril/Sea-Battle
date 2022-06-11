@@ -1,8 +1,6 @@
 <template>
-  <div class="cell"
-    @click="changeCellState"
-  > 
-    {{ cell }} 
+  <div class="cell" @click="changeCellState">
+    {{ cell }}
   </div>
 </template>
 
@@ -11,14 +9,14 @@
 import { mapGetters, mapMutations } from 'vuex'
 
 const states_map = {
-    preparing: {
-        0: 1,
-        1: 0,
-    },
-    game: {
-        0: 2,
-        1: 3,
-    },
+  preparing: {
+    0: 1,
+    1: 0,
+  },
+  game: {
+    0: 2,
+    1: 3,
+  },
 }
 
 export default {

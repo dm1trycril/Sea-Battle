@@ -1,24 +1,28 @@
 <template>
   <div class="room">
-    <div class="info-wrapper">
+    <div class="info-wrapper" v-show="!isPreparing">
       <div class="login">
-        PLAYER1
+        {{ this.getLogin }}
       </div>
       <score-ui>
       </score-ui>
       <div class="login">
-        PLAYER2
+        {{ this.getOpponentLogin }}
       </div>
     </div>
+    <div class="info-wrapper" v-show="isPreparing">Place your ships</div>
     <div class="field-wrapper">
       <field-ui :gamefield="getGamefield" @changeCellState="shipsPlacement">
       </field-ui>
-      <field-ui :gamefield="getGamefield">
+      <field-ui :gamefield="getOpponentGamefield" @changeCellState="shipsHitting" v-show="!isPreparing">
       </field-ui>
     </div>
-    <div class="turn-wrapper">
+    <div class="turn-wrapper" v-show="!isPreparing">
       <div class="turn-indicator">YOU</div>
       <div class="turn-indicator">OPPONENT</div>
+    </div>
+    <div class="bttn-play-wrapper" v-show="isPreparing">
+      <bttn-ui @click="handleUserReady" :isDisabled="playButtonDisabled">PLAY</bttn-ui>
     </div>
   </div>
 </template>
@@ -26,23 +30,49 @@
 <script>
 
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import Api from "@/api";
 
 export default {
+  data() {
+    return {
+      playButtonDisabled: false
+    }
+  },
   methods: {
     ...mapMutations({
+      loadLogin: 'room/loadLogin',
       setGamefield: 'room/setGamefield',
       setOwnCell: 'room/setOwnCell',
+      hitOpponentCell: 'room/hitOpponentCell'
     }),
     ...mapActions({
-      loadUserGamefield: 'room/loadUserGamefield'
+
     }),
     shipsPlacement(new_state, index) {
-      this.setOwnCell({new_state, index});
+      this.setOwnCell({ new_state, index });
+    },
+    shipsHitting(new_state, index) {
+      this.hitOpponentCell({ new_state, index })
+    },
+    async handleUserReady() {
+      const response = await Api.rooms.userReady(this.$route.params.id, this.getLogin, this.getGamefield);
+      const message = response.data.message;
+      if (message === "should_wait") {
+        this.playButtonDisabled = true;
+        this.$notify({
+          title: 'Waiting for opponent'
+        });
+      }
+      else if (message === "start_game") {
+        this.$notify({
+          title: 'Starting game'
+        });
+      }
     }
   },
 
   async mounted() {
-    // await this.loadUserGamefield();
+    this.loadLogin();
   },
 
   computed: {
@@ -50,7 +80,12 @@ export default {
       gamefield: state => state.room.gamefield,
     }),
     ...mapGetters({
+      getLogin: 'room/getLogin',
+      getOpponentLogin: 'room/getOpponentLogin',
       getGamefield: 'room/getGamefield',
+      getOpponentGamefield: 'room/getOpponentGamefield',
+
+      isPreparing: 'room/isPreparing'
     })
   }
 }
@@ -99,6 +134,12 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
+/* .bttnl-play-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 
 @media (max-width: 1024px) {
   .field-wrapper {

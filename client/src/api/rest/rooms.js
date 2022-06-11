@@ -3,5 +3,7 @@ export default class RoomsApi {
         this.client = client;
     }
 
-    createRoom = async (login) => await this.client.post('/createroom', {login})
+    createRoom = async (login) => await this.client.post('/room/create', {login})
+
+    userReady = async (room_id, login, gamefield) => await this.client.post('/room/ready', {room_id, login, gamefield})
 }
