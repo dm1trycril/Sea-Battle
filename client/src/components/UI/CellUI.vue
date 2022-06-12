@@ -1,6 +1,5 @@
 <template>
-  <div class="cell" @click="changeCellState">
-    {{ cell }}
+  <div class="cell" @click="changeCellState" v-bind:class="classObject">
   </div>
 </template>
 
@@ -41,13 +40,26 @@ export default {
         throw `invalid status mapping: gamestatus - ${this.getGamestatus}, cell state - ${this.cell}`;
       }
       this.$emit('changeCellState', new_state, this.index);
-    }
+    },
+
   },
 
   computed: {
     ...mapGetters({
       getGamestatus: 'room/getGamestatus',
-    })
+    }),
+    classObject: function() {
+      switch(this.cell) {
+        case 1:
+          return "cell--white";
+        case 2:
+          return "cell--gray";
+        case 3:
+          return "cell--red";
+        default:
+          return "";
+      }
+    }
   }
 }
 </script>
@@ -57,5 +69,14 @@ export default {
   aspect-ratio: 1/1;
   border: 1px solid black;
   background-color: aqua;
+}
+.cell--white {
+  background-color: white;
+}
+.cell--gray {
+  background-color: gray;
+}
+.cell--red {
+  background-color: red;
 }
 </style>
