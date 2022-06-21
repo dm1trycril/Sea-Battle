@@ -47,7 +47,6 @@ export const roomModule = {
         getGamestatus(state) {
             return state.gamestatus;
         },
-
         isPreparing(state) {
             return state.gamestatus === "preparing";
         }

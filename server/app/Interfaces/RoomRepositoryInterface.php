@@ -30,4 +30,7 @@ interface RoomRepositoryInterface
     public function UserReady($room_id, $login, $gamefield);
     public function UserJoin($room_id, $login);
 
+    public function IsOtherUserJoined($room_id);
+    public function IsOtherUserReady($room_id, $login);
+    public function IsOtherUserShot($room_id, $login);
 }

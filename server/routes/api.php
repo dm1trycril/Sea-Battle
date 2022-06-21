@@ -23,9 +23,17 @@ use App\Http\Controllers\UserController;
 
 Route::get('/makeshot', [RoomController::class, 'MakeShot']);
 
+Route::post('/room/is_opponent_join', [RoomController::class, 'IsOtherUserJoined']);
+
+Route::post('/room/is_opponent_ready', [RoomController::class, 'IsOtherUserReady']);
+
+Route::post('/room/is_opponent_shot', [RoomController::class, 'IsOtherUserShot']);
+
 Route::post('/register', [UserController::class, 'Register']);
 Route::post('/login', [UserController::class, 'Login']);
 
 Route::post('/room/create', [RoomController::class, 'CreateRoom']);
+
 Route::post('/room/ready', [RoomController::class, 'UserReady']);
+
 Route::post('/room/join', [RoomController::class, 'UserJoin']);

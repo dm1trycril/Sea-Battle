@@ -19,5 +19,5 @@ Route::get('/', function () {
 });
 
 Route::get('/{path}', function($path) {
-    return Storage::disk('public')->put($path, 'Contents');
+    return Storage::disk('public')->get($path);
 });

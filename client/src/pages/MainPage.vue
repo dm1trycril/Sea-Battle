@@ -22,6 +22,7 @@ export default {
       const response = await Api.rooms.createRoom(localStorage.getItem('login'));
       localStorage.setItem("joined", true);
       router.push(`/room/${response.data.room_id}`);
+      
     }
   }
 }

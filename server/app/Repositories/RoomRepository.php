@@ -21,12 +21,9 @@ class RoomRepository implements RoomRepositoryInterface
     {
         $room = Room::where('id', $room_id)->first();
 
-        if ($room->turn == $room->first_user_id)
-        {
+        if ($room->turn == $room->first_user_id) {
             $room->turn = $room->second_user_id;
-        }
-        else
-        {
+        } else {
             $room->turn = $room->first_user_id;
         }
 
@@ -36,7 +33,7 @@ class RoomRepository implements RoomRepositoryInterface
     public function CanMakeMove($room_id, $user_id)
     {
         $room = Room::where('id', $room_id)->first();
-        
+
         return $room->turn == $user_id;
     }
 
@@ -44,12 +41,10 @@ class RoomRepository implements RoomRepositoryInterface
     {
         $room = Room::where('id', $room_id)->first();
 
-        if ($room->first_user_id == $user_id)
-        {
+        if ($room->first_user_id == $user_id) {
             return $room->first_user_gamefield_id;
         }
-        if ($room->second_user_id == $user_id)
-        {
+        if ($room->second_user_id == $user_id) {
             return $room->second_user_gamefield_id;
         }
         throw new Exception('Error: user not belongs to this room');
@@ -59,18 +54,17 @@ class RoomRepository implements RoomRepositoryInterface
     {
         $room = Room::where('id', $room_id)->first();
 
-        if ($room->first_user_id == $user_id)
-        {
+        if ($room->first_user_id == $user_id) {
             return $room->second_user_gamefield_id;
         }
-        if ($room->second_user_id == $user_id)
-        {
+        if ($room->second_user_id == $user_id) {
             return $room->first_user_gamefield_id;
         }
         throw new Exception('Error: user not belongs to this room');
     }
 
-    public function GetCell($gamefield_id, $x) {
+    public function GetCell($gamefield_id, $x)
+    {
         $gamefield = Gamefield::where('id', $gamefield_id)->first()->gamefield;
         return $gamefield[$x];
     }
@@ -86,9 +80,9 @@ class RoomRepository implements RoomRepositoryInterface
         $gamefield->save();
     }
 
-    public function MakeShot($room_id, $user_id, $x) {
-        if (!$this->CanMakeMove($room_id, $user_id))
-        {
+    public function MakeShot($room_id, $user_id, $x)
+    {
+        if (!$this->CanMakeMove($room_id, $user_id)) {
             return  ['status' => 'error', 'error' => 'cannot_move'];
         }
 
@@ -96,31 +90,30 @@ class RoomRepository implements RoomRepositoryInterface
 
         $cell_status = $this->GetCell($gamefield_id, $x);
 
-        if ($cell_status == 0)
-        {
+        if ($cell_status == 0) {
+            $this->SetCell($gamefield_id, $x, 2);
+            $this->SwitchTurn($room_id);
+            return ['status' => 'ok'];
+        } else if ($cell_status == 1) {
             $this->SetCell($gamefield_id, $x, 2);
             $this->SwitchTurn($room_id);
             return ['status' => 'ok'];
         }
-        else if ($cell_status == 1)
-        {
-            $this->SetCell($gamefield_id, $x, 2);
-            $this->SwitchTurn($room_id);
-            return ['status' => 'ok'];
-        }
-        
+
         return  ['status' => 'error', 'error' => 'bad_parameters'];
     }
 
-    public function GetGamefield($room_id, $user_id) {
+    public function GetGamefield($room_id, $user_id)
+    {
         $gamefield_id = $this->GetFieldId($room_id, $user_id);
         $gamefield = Gamefield::where('id', $gamefield_id)->first()->gamefield;
         return $gamefield;
     }
 
-    public function CreateEmptyGamefield() {
+    public function CreateEmptyGamefield()
+    {
         $gamefield = new Gamefield();
-        $gamefield->gamefield = array_fill(0, 100, 0);
+        $gamefield->gamefield = [];
         $gamefield->save();
         return $gamefield->id;
     }
@@ -131,7 +124,21 @@ class RoomRepository implements RoomRepositoryInterface
         return $user->id;
     }
 
-    public function CreateRoom($login) 
+    public function GetOpponentId($room_id, $login) // Need to rename
+    {
+        $user_id = $this->GetUserId($login);
+
+        $room = Room::where('id', $room_id)->first();
+
+        if ($room->first_user_id == $user_id) {
+            return $room->second_user_id;
+        }
+        if ($room->second_user_id == $user_id) {
+            return $room->first_user_id;
+        }
+    }
+
+    public function CreateRoom($login)
     {
         $room = new Room();
         $room->first_user_id = $this->GetUserId($login);
@@ -150,10 +157,10 @@ class RoomRepository implements RoomRepositoryInterface
         return $room->one_user_ready;
     }
 
-    public function SetGamefield($gamfield_id, $gamefield)
+    public function SetGamefield($gamfield_id, $new_gamefield)
     {
         $gamefield = Gamefield::where('id', $gamfield_id)->first();
-        $gamefield->gamefield = $gamefield;
+        $gamefield->gamefield = $new_gamefield;
         $gamefield->save();
     }
 
@@ -165,16 +172,40 @@ class RoomRepository implements RoomRepositoryInterface
 
         $ready_flag = $this->SwitchReadyFlag($room_id);
 
-        if(!$ready_flag)
-        {
+        if (!$ready_flag) {
             Room::where('id', $room_id)->update(['status_name' => 3]);  // code 3 means "game"
         }
 
         return $ready_flag;
     }
 
-    public function UserJoin($room_id, $login,)
+    public function UserJoin($room_id, $login)
     {
         Room::where('id', $room_id)->update(['second_user_id' => $this->GetUserId($login), 'second_user_gamefield_id' => $this->CreateEmptyGamefield()]);
+    }
+
+    public function IsOtherUserJoined($room_id)
+    {
+        $room = Room::where('id', $room_id)->first();
+        if ($room->second_user_id == null) {
+            return false;
+        }
+        return true;
+    }
+
+    public function IsOtherUserReady($room_id, $login)
+    {
+        $gamefield = $this->GetGamefield($room_id, $this->GetOpponentId($room_id, $login));
+        if ($gamefield == []) {
+            return false;
+        }
+        return true;
+    }
+
+    public function IsOtherUserShot($room_id, $login)
+    {
+        $room = Room::where('id', $room_id)->first();
+        $user_id = $this->GetUserId($login);
+        return $this->WhoseTurn($room_id) == $user_id;
     }
 }

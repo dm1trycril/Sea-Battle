@@ -34,16 +34,19 @@ import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 import Api from "@/api";
 import router from '@/router/router';
 
+import { joinPolling, readyPolling } from "@/api/rest/longpolling";
+
 export default {
   data() {
     return {
       playButtonDisabled: false,
-      canPlay: false
+      canPlay: false,
     }
   },
   methods: {
     ...mapMutations({
       loadLogin: 'room/loadLogin',
+      setGamestatus: 'room/setGamestatus',
       setGamefield: 'room/setGamefield',
       setOwnCell: 'room/setOwnCell',
       hitOpponentCell: 'room/hitOpponentCell'
@@ -66,12 +69,23 @@ export default {
         this.$notify({
           title: 'Waiting for opponent'
         });
+
+        let poll_result = await readyPolling(this.$route.params.id, this.getLogin);
+
+        if (poll_result) {
+          this.playButtonDisabled = true;
+          this.$notify({
+            title: 'Starting game'
+          });
+          this.setGamestatus("game");
+        }
       }
       else if (message === "start_game") {
         this.playButtonDisabled = true;
         this.$notify({
           title: 'Starting game'
         });
+        this.setGamestatus("game");
       }
     },
 
@@ -80,6 +94,7 @@ export default {
       const message = response.data.message;
       if (message === "user_joined") {
         localStorage.setItem("joined", true);
+        this.setGamestatus = "preparing";
         this.canPlay = true;
         this.$notify({
           title: 'Joined'
@@ -97,9 +112,12 @@ export default {
       router.push(`/login?next=${router.currentRoute.value.path}`);
       return;
     }
-    console.log(localStorage.getItem("joined"));
     if (localStorage.getItem("joined")) {
       this.canPlay = true;
+      let poll_result = await joinPolling(this.$route.params.id);
+      if (poll_result) {
+        this.setGamestatus = "preparing";
+      }
     }
   },
 
@@ -112,7 +130,6 @@ export default {
       getOpponentLogin: 'room/getOpponentLogin',
       getGamefield: 'room/getGamefield',
       getOpponentGamefield: 'room/getOpponentGamefield',
-
       isPreparing: 'room/isPreparing'
     })
   }
@@ -163,11 +180,6 @@ export default {
   align-items: center;
 }
 
-/* .bttnl-play-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
 @media (max-width: 1024px) {
   .field-wrapper {
